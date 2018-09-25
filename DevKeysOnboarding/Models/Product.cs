@@ -11,7 +11,8 @@ namespace DevKeysOnboarding.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Product
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -21,8 +22,13 @@ namespace DevKeysOnboarding.Models
         }
     
         public int Id { get; set; }
+        [Display(Name = "Product Name")]
+        [Required(ErrorMessage = "Product name is required")]
+        [RegularExpression(@"^[a-zA-Z0-9'' ']+$", ErrorMessage = "Special charecters are not allowed")]
         public string Name { get; set; }
-        public double Price { get; set; }
+        [Display(Name = "Product Price")]
+        [Required(ErrorMessage = "Product price is required")]
+        public decimal Price { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProductSold> ProductSolds { get; set; }

@@ -11,7 +11,8 @@ namespace DevKeysOnboarding.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Customer
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -21,7 +22,13 @@ namespace DevKeysOnboarding.Models
         }
     
         public int Id { get; set; }
+        [Display(Name = "Customer Name")]
+        [Required(ErrorMessage = "Customer name is required")]
+        [RegularExpression(@"^[a-zA-Z0-9'' ']+$", ErrorMessage = "Special charecters are not allowed")]
         public string Name { get; set; }
+        [Display(Name = "Customer Address")]
+        [Required(ErrorMessage = "Please intput Customer Address")]
+        [RegularExpression(@"^[a-zA-Z0-9'' ']+$", ErrorMessage = "Special character should not be entered")]
         public string Address { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

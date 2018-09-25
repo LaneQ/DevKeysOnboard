@@ -11,14 +11,16 @@ namespace DevKeysOnboarding.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class ProductSold
     {
         public int Id { get; set; }
         public int ProductId { get; set; }
         public int CustomerId { get; set; }
         public int StoreId { get; set; }
-        public System.DateTime DataSold { get; set; }
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
+        public System.DateTime DateSold { get; set; }
     
         public virtual Customer Customer { get; set; }
         public virtual Product Product { get; set; }
