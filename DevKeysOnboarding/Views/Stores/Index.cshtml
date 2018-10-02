@@ -3,11 +3,18 @@
 @{
     ViewBag.Title = "Store";
 }
-
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script src="~/Scripts/knockout-3.4.2.js"></script>
+<script src="~/Scripts/knockout.validation.min.js"></script>
 <h2>Store</h2>
 
 <p>
-    <a id="btnCreate" href="#myModal" data-toggle="modal" class="btn btn-info">Create New</a>
+    <a id="btnCreate" href="#myModal" data-toggle="modal" class="btn btn-info glyphicon glyphicon-plus" style="height:34px;width:150px"> Create New</a>
+    @*<a id="btnCreate" href="#myModal" class="btn btn-info" data-toggle="modal"><span class="glyphicon glyphicon-plus"></span>Create New</a>*@
+
+
 </p>
 <table class="table">
     <tr>
@@ -17,23 +24,29 @@
         <th>
             @Html.DisplayNameFor(model => model.Address)
         </th>
-        <th></th>
+        <th>Action(Edit)</th>
+        <th>Action(Delete)</th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Address)
-        </td>
-        <td>
-            <a class="btnEdit btn btn-warning" data-toggle="modal" data-id="@item.Id" href="#myModal">Edit</a>
-            <a class="btnDelete btn btn-danger" data-toggle="modal" data-id="@item.Id" href="#myModal">Delete</a>
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                <a class="btnEdit btn btn-warning glyphicon glyphicon-edit" style="height:34px;width:82px" data-toggle="modal" data-id="@item.Id" href="#myModal">Edit</a>
+                @*<a class="btnEdit btn btn-warning" data-toggle="modal" data-id="@item.Id" href="#myModal"><span class="glyphicon glyphicon-edit"></span>Edit</a>*@
+            </td>
+            <td>
+                <a class="btnDelete btn btn-danger glyphicon glyphicon-trash" style="height:34px;width:82px" data-toggle="modal" data-id="@item.Id" href="#myModal">Delete</a>
+                @*<a class="btnDelete btn btn-danger" data-toggle="modal" data-id="@item.Id" href="#myModal"><span class="glyphicon glyphicon-trash"></span>Delete</a>*@
+            </td>
+        </tr>
+    }
 
 </table>
 <div id="myModal" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="myLargeModalLabel">

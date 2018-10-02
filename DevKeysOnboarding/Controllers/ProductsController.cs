@@ -19,7 +19,19 @@ namespace DevKeysOnboarding.Controllers
         {
             return View(db.Products.ToList());
         }
-
+        public JsonResult List()
+        {
+            using (db)
+            {
+                var prod = db.Products.Select(x => new
+                {
+                    x.Id,
+                    x.Name,
+                    x.Price
+                }).ToList();
+                return Json(prod, JsonRequestBehavior.AllowGet);
+            }
+        }
         // GET: Products/Details/5
         public ActionResult Details(int? id)
         {

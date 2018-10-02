@@ -26,6 +26,7 @@ namespace DevKeysOnboarding.Models
         [Required(ErrorMessage = "Product name is required")]
         [RegularExpression(@"^[a-zA-Z0-9'' ']+$", ErrorMessage = "Special charecters are not allowed")]
         public string Name { get; set; }
+
         [Display(Name = "Product Price")]
         [Required(ErrorMessage = "Product price is required")]
         public decimal Price { get; set; }

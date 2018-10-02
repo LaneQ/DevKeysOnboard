@@ -19,6 +19,7 @@ namespace DevKeysOnboarding.Models
         public int ProductId { get; set; }
         public int CustomerId { get; set; }
         public int StoreId { get; set; }
+        [Required(ErrorMessage = "Date is required")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public System.DateTime DateSold { get; set; }
     

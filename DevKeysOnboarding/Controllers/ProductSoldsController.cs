@@ -21,120 +21,61 @@ namespace DevKeysOnboarding.Controllers
             return View(productSolds.ToList());
         }
 
-        // GET: ProductSolds/Details/5
-        public ActionResult Details(int? id)
+        public JsonResult List()
         {
-            if (id == null)
+            using (db)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                var psold = new ProductSold();
+                ViewBag.CustomerId = new SelectList(db.Customers, "Id", "Name", psold.CustomerId);
+                ViewBag.ProductId = new SelectList(db.Products, "Id", "Name", psold.ProductId);
+                ViewBag.StoreId = new SelectList(db.Stores, "Id", "Name", psold.StoreId);
+                var product = db.ProductSolds.Include(c => c.Customer).Include(p => p.Product).Include(s => s.Store).Select(x => new {
+                    Id = x.Id,
+                    CustomerId = x.CustomerId,
+                    Customer = x.Customer.Name,
+                    ProductId = x.ProductId,
+                    Product = x.Product.Name,
+                    StoreId = x.StoreId,
+                    Store = x.Store.Name,
+                    DateSold = x.DateSold
+                }).ToList();
+                return Json(product, JsonRequestBehavior.AllowGet);
             }
-            ProductSold productSold = db.ProductSolds.Find(id);
-            if (productSold == null)
-            {
-                return HttpNotFound();
-            }
-            return View(productSold);
         }
-
-        // GET: ProductSolds/Create
-        public ActionResult Create()
+        public JsonResult Add(ProductSold prod)
         {
-            ViewBag.CustomerId = new SelectList(db.Customers, "Id", "Name");
-            ViewBag.ProductId = new SelectList(db.Products, "Id", "Name");
-            ViewBag.StoreId = new SelectList(db.Stores, "Id", "Name");
-            return View();
-        }
-
-        // POST: ProductSolds/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,ProductId,CustomerId,StoreId,DateSold")] ProductSold productSold)
-        {
-            if (ModelState.IsValid)
+            using (db)
             {
-                db.ProductSolds.Add(productSold);
+                db.ProductSolds.Add(prod);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return Json(prod, JsonRequestBehavior.AllowGet);
             }
-
-            ViewBag.CustomerId = new SelectList(db.Customers, "Id", "Name", productSold.CustomerId);
-            ViewBag.ProductId = new SelectList(db.Products, "Id", "Name", productSold.ProductId);
-            ViewBag.StoreId = new SelectList(db.Stores, "Id", "Name", productSold.StoreId);
-            return View(productSold);
         }
 
-        // GET: ProductSolds/Edit/5
-        public ActionResult Edit(int? id)
+        public JsonResult Edit(int id, ProductSold prod)
         {
-            if (id == null)
+            using (db)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            ProductSold productSold = db.ProductSolds.Find(id);
-            if (productSold == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.CustomerId = new SelectList(db.Customers, "Id", "Name", productSold.CustomerId);
-            ViewBag.ProductId = new SelectList(db.Products, "Id", "Name", productSold.ProductId);
-            ViewBag.StoreId = new SelectList(db.Stores, "Id", "Name", productSold.StoreId);
-            return View(productSold);
-        }
-
-        // POST: ProductSolds/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,ProductId,CustomerId,StoreId,DateSold")] ProductSold productSold)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(productSold).State = EntityState.Modified;
+                var prod1 = db.ProductSolds.Find(id);
+                if (prod1 != null)
+                {
+                    db.Entry(prod1).State = EntityState.Detached;
+                }
+                db.Entry(prod).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return Json(prod, JsonRequestBehavior.AllowGet);
             }
-            ViewBag.CustomerId = new SelectList(db.Customers, "Id", "Name", productSold.CustomerId);
-            ViewBag.ProductId = new SelectList(db.Products, "Id", "Name", productSold.ProductId);
-            ViewBag.StoreId = new SelectList(db.Stores, "Id", "Name", productSold.StoreId);
-            return View(productSold);
         }
 
-        // GET: ProductSolds/Delete/5
-        public ActionResult Delete(int? id)
+        public JsonResult Delete(int id)
         {
-            if (id == null)
+            using (db)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                ProductSold prod = db.ProductSolds.Find(id);
+                db.ProductSolds.Remove(prod);
+                db.SaveChanges();
+                return Json(prod, JsonRequestBehavior.AllowGet);
             }
-            ProductSold productSold = db.ProductSolds.Find(id);
-            if (productSold == null)
-            {
-                return HttpNotFound();
-            }
-            return View(productSold);
-        }
-
-        // POST: ProductSolds/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            ProductSold productSold = db.ProductSolds.Find(id);
-            db.ProductSolds.Remove(productSold);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }
